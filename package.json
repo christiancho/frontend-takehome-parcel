@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build": "./node_modules/.bin/parcel build ./index.html",
-    "dev": "concurrently './node_modules/.bin/parcel ./src/public/index.html' 'node ./server'",
+    "dev": "concurrently './node_modules/.bin/parcel ./public/index.html' 'node ./server'",
     "start": "NODE_ENV=production node ./server",
     "test": "echo 'Your test command goes here'"
   },
