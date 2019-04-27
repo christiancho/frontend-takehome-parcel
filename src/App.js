@@ -1,9 +1,11 @@
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
 import theme from './theme';
 
 import LocalStorage from '../src/services/localStorage';
+import { Header, Main, Container } from './components/Layout';
+import { Paragraph, Heading } from './components/Typography';
 
 class App extends React.Component {
   constructor(props) {
@@ -19,10 +21,33 @@ class App extends React.Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <div />
+        <ApplicationWrapper>
+          <Header>
+            <Container mx="auto">
+              <Heading size="large" color="neutral">Ruby Searcher</Heading>
+            </Container>
+          </Header>
+          <Main>
+            <Container mx="auto" my="xxl">
+              <Paragraph>
+                This is a paragraph
+              </Paragraph>
+            </Container>
+          </Main>
+        </ApplicationWrapper>
       </ThemeProvider>
     );
   }
 }
 
 export default App;
+
+const ApplicationWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`;

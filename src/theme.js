@@ -21,11 +21,12 @@ export default {
     md: '16px',
     lg: '24px',
     xl: '36px',
+    xxl: '48px',
   },
   colors: {
     sky: '#CAEBF2',
     carbon: '#A9A9A9',
-    watermelon: '#FF3B3F'
+    watermelon: '#FF3B3F',
     neutral: '#EFEFEF',
     black: '#262228',
     white: '#F4F4F4',
