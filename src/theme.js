@@ -31,4 +31,7 @@ export default {
     black: '#262228',
     white: '#F4F4F4',
   },
+  radii: {
+    default: '2px',
+  },
 };
