@@ -100,9 +100,13 @@ class App extends React.Component {
   }
 
   renderSaved() {
+    const hasSavedGems = this.state.savedGems.length > 0;
     return (
       <Grid>
-        {this.state.savedGems.map(this.renderGem)}
+        {!hasSavedGems && <Heading size="small">
+          You don't have any saved gems.
+        </Heading>}
+        {hasSavedGems && this.state.savedGems.map(this.renderGem)}
       </Grid>
     )
   }

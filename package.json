@@ -7,7 +7,8 @@
     "build": "./node_modules/.bin/parcel build ./index.html",
     "dev": "concurrently './node_modules/.bin/parcel ./public/index.html' 'node ./server'",
     "start": "NODE_ENV=production node ./server",
-    "test": "echo 'Your test command goes here'"
+    "test-unit": "jest",
+    "test-2e2": "cypress run"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
     "babel-jest": "^24.7.1",
+    "cypress": "^3.2.0",
     "jest": "^24.7.1",
     "prop-types": "^15.7.2",
     "react-test-renderer": "^16.8.6",
