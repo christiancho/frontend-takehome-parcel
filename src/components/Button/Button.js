@@ -45,4 +45,9 @@ const StyledButton = styled.button`
   outline: 0;
   cursor: pointer;
   appearance: none;
+  transition: background-color 150ms;
+
+  :hover {
+    background-color: #EFEFEF;
+  }
 `;
