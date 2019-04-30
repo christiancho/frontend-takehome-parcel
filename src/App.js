@@ -6,55 +6,77 @@ import theme from './theme';
 import LocalStorage from '../src/services/localStorage';
 import Api from '../src/services/api';
 
+import debounce from './utils/debounce';
 import { Header, Main, Container, Grid } from './components/Layout';
 import { Paragraph, Heading } from './components/Typography';
-import Card from './components/Card';
 import { MenuItem, Menu } from './components/Menu';
 import { Text } from './components/Input';
 
+import Gem from './Gem';
+
+const getNameSet = (gems) => new Set(gems.map(g => g.name));
+
 class App extends React.Component {
-  state = {
-    searchResults: [],
-    savedGems: [],
-    page: 'SEARCH',
-    query: '',
-  };
-
-  componentDidMount() {
+  constructor(props) {
+    super(props);
     const savedGems = LocalStorage.get('saved') || [];
-    this.setState({ savedGems });
+    const savedGemsSet = getNameSet(savedGems);
+    this.state = {
+      searchResults: [],
+      savedGems,
+      savedGemsSet,
+      page: 'SEARCH',
+      query: '',
+    };
   }
 
-  componentDidUpdate(_, prevState) {
-    if (this.state.query !== prevState.query) {
-      if (this.state.query.length < 2) {
-        this.setState({ searchResults: [] });
-      } else {
-        Api.search(this.state.query).then(this.updateWithResults);
-      }
-    }
-  }
+  fetchResults = debounce(() => {
+    if (this.state.query.length < 3) return;
+    Api.search(this.state.query).then((searchResults) => {
+      this.setState({ searchResults })
+    });
+  }, 250);
 
-  updateWithResults = searchResults => this.setState({ searchResults });
-
-  renderGem = (gem, index) => {
-    return (
-      <Card key={index}>
-        <Paragraph>{gem.name}</Paragraph>
-      </Card>
-    );
-  };
+  renderGem = (gem, index) => (
+    <Gem
+      name={gem.name}
+      version={gem.version}
+      isSaved={this.state.savedGemsSet.has(gem.name)}
+      onSave={this.handleSaveGem}
+      onUnsave={this.handleUnsaveGem}
+      key={index}
+    />
+  );
 
   handleSectionChange = page => () => this.setState({ page });
 
-  handleQueryChange = query => this.setState({ query });
+  handleQueryChange = query => this.setState({ query }, this.fetchResults);
 
   handleSaveGem = (name) => {
-
+    const gem = this.state.searchResults.find(gem => gem.name === name);
+    const savedGem = { ...gem, isSaved: true };
+    const savedGems = [...this.state.savedGems, savedGem];
+    const savedGemsSet = getNameSet(savedGems);
+    this.setState((prevState) => ({
+      savedGems,
+      savedGemsSet,
+    }), this.updateLocalStorage);
   };
 
   handleUnsaveGem = (name) => {
+    const index = this.state.savedGems.findIndex(gem => gem.name === name);
+    const left = this.state.savedGems.slice(0, index);
+    const right = this.state.savedGems.slice(index + 1);
+    const savedGems = [...left, ...right];
+    const savedGemsSet = getNameSet(savedGems);
+    this.setState((prevState) => ({
+      savedGems,
+      savedGemsSet,
+    }), this.updateLocalStorage);
+  };
 
+  updateLocalStorage = () => {
+    LocalStorage.set('saved', this.state.savedGems);
   };
 
   renderSearch() {
