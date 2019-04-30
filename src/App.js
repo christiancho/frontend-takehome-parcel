@@ -39,6 +39,7 @@ class App extends React.Component {
 
   renderGem = (gem, index) => (
     <Gem
+      index={index}
       name={gem.name}
       version={gem.version}
       isSaved={this.state.savedGemsSet.has(gem.name)}
@@ -87,7 +88,7 @@ class App extends React.Component {
       <>
         <Text
           placeholder="Search for a gem..."
-          value={this.state.value}
+          value={this.state.query}
           onChange={this.handleQueryChange}
         />
         {validationMessage && <Heading size="small">{validationMessage}</Heading>}
